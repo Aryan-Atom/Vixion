@@ -3,16 +3,16 @@ import { getProject, types } from '@theatre/core';
 let project;
 let sheet;
 
-function getStudio(module) {
-  const mod = module.default ?? module;
-  return mod.default?.initialize ? mod.default : mod;
-}
+// function getStudio(module) {
+//   const mod = module.default ?? module;
+//   return mod.default?.initialize ? mod.default : mod;
+// }
 
 export async function initTheatre({ projectName = 'Vixion', sheetName = 'Main', state } = {}) {
-  if (import.meta.env.DEV) {
-    const studioModule = await import('@theatre/studio');
-    getStudio(studioModule).initialize();
-  }
+  // if (import.meta.env.DEV) {
+  //   const studioModule = await import('@theatre/studio');
+  //   getStudio(studioModule).initialize();
+  // }
 
   project = getProject(projectName, state ? { state } : undefined);
   sheet = project.sheet(sheetName);

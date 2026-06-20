@@ -5,6 +5,8 @@ import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
 import { DRACOLoader } from 'three/addons/loaders/DRACOLoader.js';
 import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
 import { setupTheatreScene, bindTheatreModel } from './theatre/setup.js';
+import { getTheatreSheet, getTheatreProject } from './theatre.js';
+import { setupScrollTrigger } from './theatre/scrollTrigger.js';
 import vertexShader from "./shaders/vertexShader.glsl"
 import fragmentShader from "./shaders/vertexShader.glsl"
 
@@ -44,10 +46,16 @@ const controls = new OrbitControls(camera, renderer.domElement);
 controls.target.set(-0.0034683560499379137, 0.2695367349235052, -0.012060745148912748);
 controls.enableDamping = true;
 controls.dampingFactor = 0.05;
+controls.enabled = false;
 controls.update();
 
 // ---------------------------- Theatre.js ----------------------------
 setupTheatreScene({ camera });
+
+let lenis;
+setupScrollTrigger(getTheatreSheet(), getTheatreProject()).then((instance) => {
+  lenis = instance;
+});
 
 // ---------------------------- Lighting ----------------------------
 scene.add(new THREE.AmbientLight(0xffffff, 1));
@@ -103,8 +111,9 @@ gltfLoader.load(
 );
 
 // ---------------------------- Animation Loop ----------------------------
-function animate() {
+function animate(time) {
   requestAnimationFrame(animate);
+  lenis?.raf(time);
   controls.update();
   renderer.render(scene, camera);
 }

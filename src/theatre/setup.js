@@ -5,11 +5,10 @@ import {
   getTheatreProject,
 } from '../theatre.js';
 
-// Optional: import exported state after saving from Studio
-// import projectState from './state.json';
+import projectState from '../Vixion.theatre-project-state-v2.json';
 
 await initTheatre({
-  // state: projectState,
+  state: projectState,
 });
 
 export function setupTheatreScene({ camera }) {
