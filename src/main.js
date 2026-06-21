@@ -65,6 +65,10 @@ setupScrollTrigger(getTheatreSheet(), getTheatreProject(), {
   lenis = controller.lenis;
 });
 
+document.querySelector('.contact-form')?.addEventListener('submit', (event) => {
+  event.preventDefault();
+});
+
 // ---------------------------- Lighting ----------------------------
 scene.add(new THREE.AmbientLight(0xffffff, 1));
 

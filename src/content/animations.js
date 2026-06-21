@@ -3,6 +3,12 @@ import gsap from 'gsap';
 const ENTER_DURATION = 1.15;
 const ENTER_STAGGER = 0.09;
 const EXIT_DURATION = 0.45;
+const SCROLL_SNAP_DURATION = 2.8;
+
+const SECTION_ENTER_DELAY = {
+  3: SCROLL_SNAP_DURATION * 0.72,
+  4: SCROLL_SNAP_DURATION * 0.88,
+};
 
 export function setupContentAnimations() {
   const panels = [...document.querySelectorAll('.content-panel')];
@@ -107,8 +113,15 @@ export function setupContentAnimations() {
     }
 
     if (nextPanel) {
-      setActivePanel(nextContentIndex);
-      tl.add(animateIn(nextPanel), previousPanel ? '-=0.15' : 0);
+      const enterDelay = SECTION_ENTER_DELAY[nextContentIndex] ?? 0;
+
+      if (enterDelay > 0) {
+        tl.call(() => setActivePanel(nextContentIndex), null, enterDelay);
+        tl.add(animateIn(nextPanel), enterDelay);
+      } else {
+        setActivePanel(nextContentIndex);
+        tl.add(animateIn(nextPanel), previousPanel ? '-=0.15' : 0);
+      }
     } else {
       hideAllPanels();
     }

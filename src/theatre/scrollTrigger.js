@@ -30,7 +30,9 @@ function clamp(value, min, max) {
 export async function setupScrollTrigger(sheet, project, { onSectionChange } = {}) {
   await project.ready;
 
-  const keyframePositions = getKeyframePositions(projectState);
+  const allKeyframePositions = getKeyframePositions(projectState);
+  const panelCount = document.querySelectorAll('.content-panel').length;
+  const keyframePositions = allKeyframePositions.slice(0, panelCount);
   const scrollSpacer = document.querySelector('.scroll-spacer');
   const sectionHeight = window.innerHeight;
   const totalHeight = sectionHeight * keyframePositions.length;
