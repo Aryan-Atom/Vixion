@@ -5,9 +5,9 @@ import { DRACOLoader } from 'three/addons/loaders/DRACOLoader.js';
 const MODEL_PATH = '/Models/Thunder2-v1.glb';
 
 const TEXTURE_MAP = {
-  Background: '/Textures/Background.png',
+  Background: '/Textures/Background.webp',
   Thunder: '/Textures/Lightning.png',
-  Vixion: '/Textures/Vision_UV.png',
+  Vixion: '/Textures/Vision_UV.webp',
 };
 
 const IMAGE_PATHS = [
