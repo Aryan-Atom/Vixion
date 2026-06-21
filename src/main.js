@@ -1,4 +1,3 @@
-// ---------------------------- Imports ----------------------------
 import './style.css';
 import * as THREE from 'three';
 import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
@@ -7,6 +6,12 @@ import { getTheatreSheet, getTheatreProject } from './theatre.js';
 import { setupScrollTrigger } from './theatre/scrollTrigger.js';
 import { setupContentAnimations } from './content/animations.js';
 import { preloadAssets, dismissLoader } from './preload.js';
+import {
+  bindWireframeModel,
+  createWireframeMaterial,
+  prepareWireframeGeometry,
+  setupWireframeToggle,
+} from './wireframeTransition.js';
 
 // ---------------------------- Canvas ----------------------------
 const canvas = document.querySelector('#experience-canvas');
@@ -69,12 +74,7 @@ document.querySelector('.contact-form')?.addEventListener('submit', (event) => {
 // ---------------------------- Lighting ----------------------------
 scene.add(new THREE.AmbientLight(0xffffff, 1));
 
-function applyTexture(mesh, texture) {
-  mesh.material = new THREE.MeshStandardMaterial({
-    map: texture,
-    side: THREE.DoubleSide,
-  });
-}
+const WIREFRAME_STORAGE_KEY = 'vixion-wireframe-mode';
 
 function updateLoaderProgress(progress) {
   const percent = Math.round(progress * 100);
@@ -91,15 +91,24 @@ async function initExperience() {
   try {
     const { gltf, textures } = await preloadAssets(updateLoaderProgress);
 
-    scene.add(gltf.scene);
+    const modelRoot = gltf.scene;
+    scene.add(modelRoot);
 
-    gltf.scene.traverse((child) => {
+    modelRoot.traverse((child) => {
       if (child.isMesh && textures[child.name]) {
-        applyTexture(child, textures[child.name]);
+        child.geometry = prepareWireframeGeometry(child.geometry);
+        child.material = createWireframeMaterial(textures[child.name]);
       }
     });
 
-    bindTheatreModel(gltf.scene);
+    bindWireframeModel(modelRoot);
+    bindTheatreModel(modelRoot);
+
+    const savedWireframe = localStorage.getItem(WIREFRAME_STORAGE_KEY) === '1';
+    setupWireframeToggle({
+      storageKey: WIREFRAME_STORAGE_KEY,
+      initialEnabled: savedWireframe,
+    });
 
     await new Promise((resolve) => setTimeout(resolve, 250));
     await dismissLoader();
