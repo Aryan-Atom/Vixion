@@ -2,6 +2,7 @@ import gsap from 'gsap';
 import Lenis from 'lenis';
 import 'lenis/dist/lenis.css';
 import projectState from '../Vixion.theatre-project-state-v2.json';
+import { getViewportHeight } from '../viewport.js';
 
 const SNAP_DURATION = 2.8;
 const SNAP_EASE = 'power1.inOut';
@@ -34,7 +35,7 @@ export async function setupScrollTrigger(sheet, project, { onSectionChange } = {
   const panelCount = document.querySelectorAll('.content-panel').length;
   const keyframePositions = allKeyframePositions.slice(0, panelCount);
   const scrollSpacer = document.querySelector('.scroll-spacer');
-  const sectionHeight = window.innerHeight;
+  const sectionHeight = getViewportHeight();
   const totalHeight = sectionHeight * keyframePositions.length;
 
   if (scrollSpacer) {
@@ -131,8 +132,8 @@ export async function setupScrollTrigger(sheet, project, { onSectionChange } = {
     }
   });
 
-  window.addEventListener('resize', () => {
-    const nextSectionHeight = window.innerHeight;
+  function handleViewportResize() {
+    const nextSectionHeight = getViewportHeight();
     const nextTotalHeight = nextSectionHeight * keyframePositions.length;
 
     if (scrollSpacer) {
@@ -140,7 +141,10 @@ export async function setupScrollTrigger(sheet, project, { onSectionChange } = {
     }
 
     lenis.scrollTo(currentIndex * nextSectionHeight, { immediate: true });
-  });
+  }
+
+  window.addEventListener('resize', handleViewportResize);
+  window.visualViewport?.addEventListener('resize', handleViewportResize);
 
   onSectionChange?.(currentIndex);
 

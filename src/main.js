@@ -1,5 +1,6 @@
 // ---------------------------- Imports ----------------------------
 import './style.css';
+import { getViewportHeight, getViewportWidth, setupViewportSync } from './viewport.js';
 import * as THREE from 'three';
 import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
 import { setupTheatreScene, bindTheatreModel } from './theatre/setup.js';
@@ -7,6 +8,8 @@ import { getTheatreSheet, getTheatreProject } from './theatre.js';
 import { setupScrollTrigger } from './theatre/scrollTrigger.js';
 import { setupContentAnimations } from './content/animations.js';
 import { preloadAssets, dismissLoader } from './preload.js';
+
+setupViewportSync();
 
 // ---------------------------- Canvas ----------------------------
 const canvas = document.querySelector('#experience-canvas');
@@ -17,27 +20,30 @@ const scene = new THREE.Scene();
 // ---------------------------- Renderer ----------------------------
 const renderer = new THREE.WebGLRenderer({ canvas, antialias: true });
 renderer.setPixelRatio(Math.max(window.devicePixelRatio, 2));
-renderer.setSize(window.innerWidth, window.innerHeight);
+renderer.setSize(getViewportWidth(), getViewportHeight());
 renderer.outputColorSpace = THREE.SRGBColorSpace;
 
 // ---------------------------- Camera ----------------------------
 const camera = new THREE.PerspectiveCamera(
   25,
-  window.innerWidth / window.innerHeight,
+  getViewportWidth() / getViewportHeight(),
   0.1,
   1000
 );
 camera.position.set(1.982033480498498, 0.3106277298483349, 0.011904999253422175);
 
 // ---------------------------- Resize ----------------------------
-window.addEventListener('resize', () => {
-  renderer.setSize(window.innerWidth, window.innerHeight);
+function handleViewportChange() {
+  renderer.setSize(getViewportWidth(), getViewportHeight());
 
   if (camera.isPerspectiveCamera) {
-    camera.aspect = window.innerWidth / window.innerHeight;
+    camera.aspect = getViewportWidth() / getViewportHeight();
     camera.updateProjectionMatrix();
   }
-});
+}
+
+window.addEventListener('resize', handleViewportChange);
+window.visualViewport?.addEventListener('resize', handleViewportChange);
 
 // ---------------------------- Controls ----------------------------
 const controls = new OrbitControls(camera, renderer.domElement);

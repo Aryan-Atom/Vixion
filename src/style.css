@@ -16,6 +16,10 @@
   --orb-size: clamp(8rem, 14vw, 10.75rem);
   --projects-inline: clamp(1.5rem, 5vw, 5rem);
   --nav-height: 5rem;
+  --safe-top: env(safe-area-inset-top, 0px);
+  --safe-bottom: env(safe-area-inset-bottom, 0px);
+  --viewport-height: 100vh;
+  --viewport-height: 100dvh;
 }
 
 * {
@@ -26,11 +30,12 @@
 
 html {
   overflow: hidden;
+  height: var(--viewport-height);
 }
 
 body {
   width: 100%;
-  min-height: 100%;
+  min-height: var(--viewport-height);
   overflow-x: hidden;
   background: var(--color-bg);
   color: var(--color-text);
@@ -43,7 +48,7 @@ body {
   position: fixed;
   inset: 0;
   width: 100%;
-  height: 100%;
+  height: var(--app-height, var(--viewport-height));
   overflow: hidden;
 }
 
@@ -68,6 +73,7 @@ body:not(.is-ready) {
   display: flex;
   align-items: center;
   justify-content: center;
+  height: var(--app-height, var(--viewport-height));
   background: var(--color-bg);
 }
 
@@ -126,6 +132,7 @@ body:not(.is-ready) {
   position: fixed;
   inset: 0;
   z-index: 99;
+  height: var(--app-height, var(--viewport-height));
   background: var(--color-bg);
   pointer-events: auto;
   --reveal-radius: 0px;
@@ -154,7 +161,7 @@ body:not(.is-ready) {
   align-items: center;
   justify-content: center;
   width: 100%;
-  padding: 1.5rem 2rem;
+  padding: calc(1.5rem + var(--safe-top)) 2rem 1.5rem;
   background: transparent;
   pointer-events: none;
 }
@@ -176,12 +183,14 @@ body:not(.is-ready) {
   position: fixed;
   inset: 0;
   z-index: 10;
+  height: var(--app-height, var(--viewport-height));
   pointer-events: none;
 }
 
 .content-panel {
   position: absolute;
   inset: 0;
+  height: var(--app-height, var(--viewport-height));
   display: flex;
   align-items: center;
   padding: var(--nav-height) clamp(1.5rem, 5vw, 5rem) 4rem;
@@ -285,7 +294,7 @@ body:not(.is-ready) {
   gap: clamp(1rem, 2vw, 2rem);
   width: 100%;
   align-items: center;
-  transform: translateY(clamp(-2.5rem, -9vh, -5rem));
+  transform: translateY(clamp(-2.5rem, -9dvh, -5rem));
 }
 
 .hero-tagline__item {
@@ -303,7 +312,7 @@ body:not(.is-ready) {
 .hero-tagline__item--center {
   justify-self: center;
   align-items: center;
-  transform: translateY(clamp(-1.5rem, -3vh, -0.75rem));
+  transform: translateY(clamp(-1.5rem, -3dvh, -0.75rem));
 }
 
 .hero-tagline__item--right {
@@ -359,7 +368,7 @@ body:not(.is-ready) {
 
 .hero-footer {
   position: absolute;
-  bottom: clamp(1.75rem, 4vh, 2.75rem);
+  bottom: clamp(1.75rem, 4dvh, 2.75rem);
   left: 0;
   right: 0;
   display: flex;
@@ -457,7 +466,7 @@ body:not(.is-ready) {
   width: 100%;
   align-items: center;
   justify-items: center;
-  transform: translateY(clamp(-2.5rem, -9vh, -5rem));
+  transform: translateY(clamp(-2.5rem, -9dvh, -5rem));
 }
 
 .cta-heading-offset {
@@ -502,9 +511,9 @@ body:not(.is-ready) {
 .content-panel--projects {
   align-items: stretch;
   justify-content: flex-start;
-  padding-top: calc(var(--nav-height) + clamp(0.75rem, 2vh, 1.25rem));
+  padding-top: calc(var(--nav-height) + clamp(0.75rem, 2dvh, 1.25rem));
   padding-inline: var(--projects-inline);
-  padding-bottom: clamp(0.75rem, 1.5vh, 1.25rem);
+  padding-bottom: clamp(0.75rem, 1.5dvh, 1.25rem);
   pointer-events: auto;
   overflow-y: auto;
   overscroll-behavior: contain;
@@ -513,7 +522,7 @@ body:not(.is-ready) {
 .projects-panel {
   display: flex;
   flex-direction: column;
-  gap: clamp(0.5rem, 1vh, 0.75rem);
+  gap: clamp(0.5rem, 1dvh, 0.75rem);
   width: 100%;
 }
 
@@ -556,11 +565,11 @@ body:not(.is-ready) {
   flex-shrink: 0;
   width: min(34rem, 100%);
   margin-inline: auto;
-  padding-top: clamp(1.25rem, 3vh, 2rem);
+  padding-top: clamp(1.25rem, 3dvh, 2rem);
 }
 
 .contact-section__heading {
-  margin: 0 0 clamp(0.55rem, 1vh, 0.75rem);
+  margin: 0 0 clamp(0.55rem, 1dvh, 0.75rem);
   font-family: var(--font-display);
   font-size: clamp(1rem, 1.8vw, 1.35rem);
   font-weight: 700;
@@ -575,7 +584,7 @@ body:not(.is-ready) {
   display: flex;
   flex-direction: column;
   align-items: stretch;
-  gap: clamp(0.65rem, 1.2vh, 0.9rem);
+  gap: clamp(0.65rem, 1.2dvh, 0.9rem);
   width: 100%;
   margin-inline: auto;
 }
@@ -793,12 +802,12 @@ body:not(.is-ready) {
     --model-lane-min: 0;
     --model-lane-left: 0;
     --model-lane-right: 0;
-    --nav-height: 4.5rem;
+    --nav-height: calc(4.5rem + var(--safe-top));
     --projects-inline: 1.25rem;
   }
 
   .top-nav {
-    padding: 1rem 1.25rem;
+    padding: calc(1rem + var(--safe-top)) 1.25rem 1rem;
   }
 
   .top-nav__logo img {
@@ -809,7 +818,7 @@ body:not(.is-ready) {
     align-items: flex-end;
     padding-top: calc(var(--nav-height) + 0.75rem);
     padding-inline: 1.25rem;
-    padding-bottom: 2.5rem;
+    padding-bottom: max(2.5rem, calc(1.5rem + var(--safe-bottom)));
     background: linear-gradient(
       to top,
       rgba(5, 5, 10, 0.94) 0%,
@@ -837,7 +846,7 @@ body:not(.is-ready) {
     align-items: center;
     justify-content: center;
     padding-top: var(--nav-height);
-    padding-bottom: 6.5rem;
+    padding-bottom: max(6.5rem, calc(5rem + var(--safe-bottom)));
     background: linear-gradient(
       to top,
       rgba(5, 5, 10, 0.9) 0%,
@@ -900,7 +909,7 @@ body:not(.is-ready) {
   }
 
   .hero-footer {
-    bottom: 1.5rem;
+    bottom: max(1.5rem, calc(1rem + var(--safe-bottom)));
     gap: 0.875rem;
     padding-inline: 1.25rem;
   }
@@ -923,7 +932,7 @@ body:not(.is-ready) {
 
   .content-panel--about .content-panel__layout,
   .content-panel--process .content-panel__layout {
-    max-height: calc(100dvh - var(--nav-height) - 1.5rem);
+    max-height: calc(var(--app-height, 100dvh) - var(--nav-height) - 1.5rem);
     overflow-y: auto;
     overscroll-behavior: contain;
     -webkit-overflow-scrolling: touch;
@@ -991,7 +1000,7 @@ body:not(.is-ready) {
     align-items: center;
     justify-content: center;
     padding-top: var(--nav-height);
-    padding-bottom: 6.5rem;
+    padding-bottom: max(6.5rem, calc(5rem + var(--safe-bottom)));
     background: linear-gradient(
       to top,
       rgba(5, 5, 10, 0.9) 0%,
@@ -1029,7 +1038,7 @@ body:not(.is-ready) {
     justify-content: flex-start;
     padding-top: calc(var(--nav-height) + 0.75rem);
     padding-inline: 1.25rem;
-    padding-bottom: 1rem;
+    padding-bottom: max(1rem, calc(0.5rem + var(--safe-bottom)));
     background: rgba(5, 5, 10, 0.72);
   }
 
@@ -1097,11 +1106,11 @@ body:not(.is-ready) {
 
 @media (max-width: 480px) {
   :root {
-    --nav-height: 4rem;
+    --nav-height: calc(4rem + var(--safe-top));
   }
 
   .top-nav {
-    padding: 0.875rem 1rem;
+    padding: calc(0.875rem + var(--safe-top)) 1rem 0.875rem;
   }
 
   .top-nav__logo img {
@@ -1129,7 +1138,7 @@ body:not(.is-ready) {
   }
 
   .hero-footer {
-    bottom: 1.25rem;
+    bottom: max(1.25rem, calc(0.75rem + var(--safe-bottom)));
     padding-inline: 1rem;
   }
 
