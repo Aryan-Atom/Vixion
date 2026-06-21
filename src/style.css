@@ -730,11 +730,32 @@ canvas {
     max-width: 100%;
   }
 
+  .content-panel--hero {
+    align-items: center;
+    justify-content: center;
+    padding-bottom: clamp(5rem, 14vh, 6.5rem);
+    background: linear-gradient(
+      to top,
+      rgba(5, 5, 10, 0.88) 0%,
+      rgba(5, 5, 10, 0.35) 38%,
+      transparent 62%
+    );
+  }
+
   .hero-tagline {
-    grid-template-columns: 1fr;
-    gap: 1.25rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 0.2rem;
+    width: auto;
+    margin-inline: auto;
     text-align: center;
-    transform: none;
+    transform: translateY(clamp(-1.75rem, -7vh, -3.25rem));
+  }
+
+  .hero-tagline__item {
+    gap: 0;
   }
 
   .hero-tagline__item--left,
@@ -747,16 +768,26 @@ canvas {
     transform: none;
   }
 
+  .hero-tagline__word,
+  .hero-tagline__word--motion {
+    font-size: clamp(0.5rem, 2.6vw, 0.68rem);
+    font-weight: 800;
+    letter-spacing: 0.1em;
+    line-height: 1.1;
+    color: #0a0a0a;
+    text-shadow: none;
+  }
+
+  .hero-tagline__word--motion {
+    display: block;
+    width: auto;
+    height: auto;
+    white-space: nowrap;
+  }
+
   .hero-tagline__item--left .hero-tagline__word::after,
   .hero-tagline__item--right .hero-tagline__word::after {
-    margin-left: auto;
-    margin-right: auto;
-    background: linear-gradient(
-      90deg,
-      transparent,
-      var(--color-accent),
-      transparent
-    );
+    display: none;
   }
 
   .hero-footer {
@@ -770,17 +801,39 @@ canvas {
     letter-spacing: 0.14em;
   }
 
+  .content-panel--cta {
+    align-items: center;
+    justify-content: center;
+    padding-bottom: clamp(5rem, 14vh, 6.5rem);
+    background: linear-gradient(
+      to top,
+      rgba(5, 5, 10, 0.88) 0%,
+      rgba(5, 5, 10, 0.35) 38%,
+      transparent 62%
+    );
+  }
+
   .cta-heading-shell {
-    transform: none;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: auto;
+    transform: translateY(clamp(-4.5rem, -16vh, -7.5rem));
   }
 
   .cta-heading-offset {
-    transform: translate(0, -36px);
+    transform: none;
   }
 
   .cta-heading {
-    width: clamp(6.75rem, 28vw, 9rem);
-    height: clamp(6.75rem, 28vw, 9rem);
+    width: clamp(6.75rem, 28vw, 8.75rem);
+    height: clamp(6.75rem, 28vw, 8.75rem);
+    gap: 0.15em;
+  }
+
+  .cta-heading__line {
+    font-size: 14cqw;
   }
 
   .content-panel--projects {
