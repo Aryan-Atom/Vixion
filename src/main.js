@@ -62,7 +62,8 @@ let scrollController;
 const content = setupContentAnimations({ deferInitial: true });
 
 setupScrollTrigger(getTheatreSheet(), getTheatreProject(), {
-  onSectionChange: (index) => content.goToSection(index),
+  onSectionChange: (index, { direction } = {}) =>
+    content.goToSection(index, { direction }),
 }).then((controller) => {
   scrollController = controller;
   lenis = controller.lenis;

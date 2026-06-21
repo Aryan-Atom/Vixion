@@ -60,9 +60,11 @@ export async function setupScrollTrigger(sheet, project, { onSectionChange } = {
     nextIndex = clamp(nextIndex, 0, keyframePositions.length - 1);
     if (nextIndex === currentIndex || isSnapping) return;
 
+    const direction = nextIndex - currentIndex;
+
     isSnapping = true;
     currentIndex = nextIndex;
-    onSectionChange?.(currentIndex);
+    onSectionChange?.(currentIndex, { direction });
 
     const targetScroll = currentIndex * sectionHeight;
     const targetPosition = keyframePositions[currentIndex];

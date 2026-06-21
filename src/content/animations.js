@@ -14,6 +14,7 @@ export function setupContentAnimations({ deferInitial = false } = {}) {
   const panels = [...document.querySelectorAll('.content-panel')];
   let activeContentIndex = 0;
   let isAnimating = false;
+  let sectionTimeline = null;
 
   panels.forEach((panel) => {
     gsap.set(panel.querySelectorAll('[data-animate]'), {
@@ -69,21 +70,39 @@ export function setupContentAnimations({ deferInitial = false } = {}) {
     });
   }
 
-  function goToSection(scrollIndex, { immediate = false } = {}) {
+  function getDomActiveIndex() {
+    return panels.findIndex((panel) => panel.classList.contains('is-active'));
+  }
+
+  function resetPanelItems(panel) {
+    gsap.set(panel.querySelectorAll('[data-animate]'), {
+      opacity: 0,
+      y: 32,
+      filter: 'blur(6px)',
+    });
+  }
+
+  function activatePanel(index) {
+    activeContentIndex = index;
+    setActivePanel(index);
+  }
+
+  function goToSection(scrollIndex, { immediate = false, direction = 0 } = {}) {
     const nextContentIndex = scrollIndex < panels.length ? scrollIndex : -1;
+    const domActiveIndex = getDomActiveIndex();
 
-    if (nextContentIndex === activeContentIndex && !immediate) return;
+    if (nextContentIndex === domActiveIndex && !immediate) return;
 
-    const previousPanel =
-      activeContentIndex >= 0 ? panels[activeContentIndex] : null;
+    const previousPanel = domActiveIndex >= 0 ? panels[domActiveIndex] : null;
     const nextPanel = nextContentIndex >= 0 ? panels[nextContentIndex] : null;
     const allItems = panels.flatMap((panel) => [...panel.querySelectorAll('[data-animate]')]);
 
+    sectionTimeline?.kill();
     gsap.killTweensOf(allItems);
 
-    activeContentIndex = nextContentIndex;
-
     if (immediate) {
+      activeContentIndex = nextContentIndex;
+
       panels.forEach((panel, i) => {
         const items = panel.querySelectorAll('[data-animate]');
         const isActive = i === nextContentIndex;
@@ -108,21 +127,26 @@ export function setupContentAnimations({ deferInitial = false } = {}) {
       },
     });
 
+    sectionTimeline = tl;
+
     if (previousPanel) {
       tl.add(animateOut(previousPanel));
     }
 
     if (nextPanel) {
-      const enterDelay = SECTION_ENTER_DELAY[nextContentIndex] ?? 0;
+      const isBackward = direction < 0;
+      const enterDelay = isBackward ? 0 : (SECTION_ENTER_DELAY[nextContentIndex] ?? 0);
 
       if (enterDelay > 0) {
-        tl.call(() => setActivePanel(nextContentIndex), null, enterDelay);
+        tl.call(() => activatePanel(nextContentIndex), null, enterDelay);
         tl.add(animateIn(nextPanel), enterDelay);
       } else {
-        setActivePanel(nextContentIndex);
+        activatePanel(nextContentIndex);
+        resetPanelItems(nextPanel);
         tl.add(animateIn(nextPanel), previousPanel ? '-=0.15' : 0);
       }
     } else {
+      activeContentIndex = -1;
       hideAllPanels();
     }
   }
