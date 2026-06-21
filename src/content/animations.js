@@ -10,7 +10,7 @@ const SECTION_ENTER_DELAY = {
   4: SCROLL_SNAP_DURATION * 0.88,
 };
 
-export function setupContentAnimations() {
+export function setupContentAnimations({ deferInitial = false } = {}) {
   const panels = [...document.querySelectorAll('.content-panel')];
   let activeContentIndex = 0;
   let isAnimating = false;
@@ -127,12 +127,19 @@ export function setupContentAnimations() {
     }
   }
 
-  requestAnimationFrame(() => {
-    animateIn(panels[0]);
-  });
+  function playInitial() {
+    return animateIn(panels[0]);
+  }
+
+  if (!deferInitial) {
+    requestAnimationFrame(() => {
+      playInitial();
+    });
+  }
 
   return {
     goToSection,
+    playInitial,
     getActiveIndex: () => activeContentIndex,
   };
 }

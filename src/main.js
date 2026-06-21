@@ -53,7 +53,7 @@ setupTheatreScene({ camera });
 let lenis;
 let scrollController;
 
-const content = setupContentAnimations();
+const content = setupContentAnimations({ deferInitial: true });
 
 setupScrollTrigger(getTheatreSheet(), getTheatreProject(), {
   onSectionChange: (index) => content.goToSection(index),
@@ -101,11 +101,13 @@ async function initExperience() {
 
     bindTheatreModel(gltf.scene);
 
-    await new Promise((resolve) => setTimeout(resolve, 350));
-    dismissLoader();
+    await new Promise((resolve) => setTimeout(resolve, 250));
+    await dismissLoader();
+    content.playInitial();
   } catch (error) {
     console.error('Failed to preload experience:', error);
-    dismissLoader();
+    await dismissLoader();
+    content.playInitial();
   }
 }
 

@@ -1,6 +1,10 @@
 import * as THREE from 'three';
 import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
 import { DRACOLoader } from 'three/addons/loaders/DRACOLoader.js';
+import gsap from 'gsap';
+
+const REVEAL_DURATION = 1.55;
+const REVEAL_EASE = 'power3.inOut';
 
 const MODEL_PATH = '/Models/Thunder2-v1.glb';
 
@@ -139,22 +143,40 @@ export async function preloadAssets(onProgress) {
   return { gltf, textures };
 }
 
-export function dismissLoader() {
+function wait(ms) {
+  return new Promise((resolve) => setTimeout(resolve, ms));
+}
+
+export async function dismissLoader() {
   const loader = document.getElementById('loader');
-  if (!loader) {
+  const reveal = document.getElementById('reveal');
+
+  if (loader) {
+    loader.classList.add('is-leaving');
+    loader.setAttribute('aria-busy', 'false');
+    await wait(360);
+    loader.remove();
+  }
+
+  if (!reveal) {
     document.body.classList.add('is-ready');
     return;
   }
 
-  loader.classList.add('is-hidden');
-  loader.setAttribute('aria-busy', 'false');
-  document.body.classList.add('is-ready');
+  if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+    reveal.remove();
+    document.body.classList.add('is-ready');
+    return;
+  }
 
-  loader.addEventListener(
-    'transitionend',
-    () => {
-      loader.remove();
-    },
-    { once: true }
-  );
+  reveal.setAttribute('aria-hidden', 'false');
+
+  await gsap.to(reveal, {
+    '--reveal-radius': '150vmax',
+    duration: REVEAL_DURATION,
+    ease: REVEAL_EASE,
+  });
+
+  reveal.remove();
+  document.body.classList.add('is-ready');
 }
