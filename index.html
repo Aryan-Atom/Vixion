@@ -13,6 +13,35 @@
     />
   </head>
   <body>
+    <div
+      id="loader"
+      class="loader"
+      role="status"
+      aria-live="polite"
+      aria-busy="true"
+      aria-label="Loading experience"
+    >
+      <div class="loader__inner">
+        <img
+          class="loader__logo"
+          src="/assets/logo.svg"
+          alt="ThunderCorp"
+          width="174"
+          height="18"
+        />
+        <div
+          class="loader__track"
+          role="progressbar"
+          aria-valuemin="0"
+          aria-valuemax="100"
+          aria-valuenow="0"
+        >
+          <div class="loader__fill"></div>
+        </div>
+        <p class="loader__percent">0%</p>
+      </div>
+    </div>
+
     <header class="top-nav">
       <a href="/" class="top-nav__logo" aria-label="Vixion home">
         <img src="/assets/logo.svg" alt="Vixion" width="174" height="18" />

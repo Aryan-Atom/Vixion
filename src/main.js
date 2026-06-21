@@ -1,15 +1,12 @@
 // ---------------------------- Imports ----------------------------
 import './style.css';
 import * as THREE from 'three';
-import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
-import { DRACOLoader } from 'three/addons/loaders/DRACOLoader.js';
 import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
 import { setupTheatreScene, bindTheatreModel } from './theatre/setup.js';
 import { getTheatreSheet, getTheatreProject } from './theatre.js';
 import { setupScrollTrigger } from './theatre/scrollTrigger.js';
 import { setupContentAnimations } from './content/animations.js';
-import vertexShader from "./shaders/vertexShader.glsl"
-import fragmentShader from "./shaders/vertexShader.glsl"
+import { preloadAssets, dismissLoader } from './preload.js';
 
 // ---------------------------- Canvas ----------------------------
 const canvas = document.querySelector('#experience-canvas');
@@ -18,8 +15,8 @@ const canvas = document.querySelector('#experience-canvas');
 const scene = new THREE.Scene();
 
 // ---------------------------- Renderer ----------------------------
-const renderer = new THREE.WebGLRenderer({ canvas :canvas, antialias: true });
-renderer.setPixelRatio(Math.max(window.devicePixelRatio,2));
+const renderer = new THREE.WebGLRenderer({ canvas, antialias: true });
+renderer.setPixelRatio(Math.max(window.devicePixelRatio, 2));
 renderer.setSize(window.innerWidth, window.innerHeight);
 renderer.outputColorSpace = THREE.SRGBColorSpace;
 
@@ -72,23 +69,6 @@ document.querySelector('.contact-form')?.addEventListener('submit', (event) => {
 // ---------------------------- Lighting ----------------------------
 scene.add(new THREE.AmbientLight(0xffffff, 1));
 
-// ---------------------------- Textures ----------------------------
-const textureLoader = new THREE.TextureLoader();
-const textureMap = {
-  Background: '/Textures/Background.png',
-  Thunder: '/Textures/Lightning.png',
-  Vixion: '/Textures/Vision_UV.png',
-};
-
-const textures = Object.fromEntries(
-  Object.entries(textureMap).map(([name, path]) => {
-    const texture = textureLoader.load(path);
-    texture.colorSpace = THREE.SRGBColorSpace;
-    texture.flipY = false;
-    return [name, texture];
-  })
-);
-
 function applyTexture(mesh, texture) {
   mesh.material = new THREE.MeshStandardMaterial({
     map: texture,
@@ -96,16 +76,21 @@ function applyTexture(mesh, texture) {
   });
 }
 
-// ---------------------------- Model Loading ----------------------------
-const dracoLoader = new DRACOLoader();
-dracoLoader.setDecoderPath('/draco/');
+function updateLoaderProgress(progress) {
+  const percent = Math.round(progress * 100);
+  const fill = document.querySelector('.loader__fill');
+  const label = document.querySelector('.loader__percent');
+  const track = document.querySelector('.loader__track');
 
-const gltfLoader = new GLTFLoader();
-gltfLoader.setDRACOLoader(dracoLoader);
+  if (fill) fill.style.width = `${percent}%`;
+  if (label) label.textContent = `${percent}%`;
+  if (track) track.setAttribute('aria-valuenow', String(percent));
+}
 
-gltfLoader.load(
-  '/Models/Thunder2-v1.glb',
-  (gltf) => {
+async function initExperience() {
+  try {
+    const { gltf, textures } = await preloadAssets(updateLoaderProgress);
+
     scene.add(gltf.scene);
 
     gltf.scene.traverse((child) => {
@@ -115,12 +100,16 @@ gltfLoader.load(
     });
 
     bindTheatreModel(gltf.scene);
-  },
-  undefined,
-  (error) => {
-    console.error('Failed to load model:', error);
+
+    await new Promise((resolve) => setTimeout(resolve, 350));
+    dismissLoader();
+  } catch (error) {
+    console.error('Failed to preload experience:', error);
+    dismissLoader();
   }
-);
+}
+
+initExperience();
 
 // ---------------------------- Animation Loop ----------------------------
 function animate(time) {
