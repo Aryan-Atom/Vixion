@@ -7,6 +7,7 @@ import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
 import { setupTheatreScene, bindTheatreModel } from './theatre/setup.js';
 import { getTheatreSheet, getTheatreProject } from './theatre.js';
 import { setupScrollTrigger } from './theatre/scrollTrigger.js';
+import { setupContentAnimations } from './content/animations.js';
 import vertexShader from "./shaders/vertexShader.glsl"
 import fragmentShader from "./shaders/vertexShader.glsl"
 
@@ -53,8 +54,15 @@ controls.update();
 setupTheatreScene({ camera });
 
 let lenis;
-setupScrollTrigger(getTheatreSheet(), getTheatreProject()).then((instance) => {
-  lenis = instance;
+let scrollController;
+
+const content = setupContentAnimations();
+
+setupScrollTrigger(getTheatreSheet(), getTheatreProject(), {
+  onSectionChange: (index) => content.goToSection(index),
+}).then((controller) => {
+  scrollController = controller;
+  lenis = controller.lenis;
 });
 
 // ---------------------------- Lighting ----------------------------

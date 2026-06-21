@@ -27,7 +27,7 @@ function clamp(value, min, max) {
   return Math.min(Math.max(value, min), max);
 }
 
-export async function setupScrollTrigger(sheet, project) {
+export async function setupScrollTrigger(sheet, project, { onSectionChange } = {}) {
   await project.ready;
 
   const keyframePositions = getKeyframePositions(projectState);
@@ -59,6 +59,7 @@ export async function setupScrollTrigger(sheet, project) {
 
     isSnapping = true;
     currentIndex = nextIndex;
+    onSectionChange?.(currentIndex);
 
     const targetScroll = currentIndex * sectionHeight;
     const targetPosition = keyframePositions[currentIndex];
@@ -139,5 +140,11 @@ export async function setupScrollTrigger(sheet, project) {
     lenis.scrollTo(currentIndex * nextSectionHeight, { immediate: true });
   });
 
-  return lenis;
+  onSectionChange?.(currentIndex);
+
+  return {
+    lenis,
+    snapToIndex,
+    getCurrentIndex: () => currentIndex,
+  };
 }

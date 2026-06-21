@@ -4,7 +4,13 @@
     <meta charset="UTF-8" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>vixion</title>
+    <title>ThunderCorp — Vixion</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500&family=Syne:wght@600;700;800&display=swap"
+      rel="stylesheet"
+    />
   </head>
   <body>
     <header class="top-nav">
@@ -12,9 +18,174 @@
         <img src="/assets/logo.svg" alt="Vixion" width="174" height="18" />
       </a>
     </header>
+
     <div id="app">
       <canvas id="experience-canvas"></canvas>
     </div>
+
+    <main class="content-layer" aria-live="polite">
+      <!-- HERO — tagline split around model -->
+      <section
+        class="content-panel content-panel--hero is-active"
+        data-section="0"
+      >
+        <h1 class="hero-tagline">
+          <span
+            class="hero-tagline__item hero-tagline__item--left"
+            data-animate
+          >
+            <span class="hero-tagline__word">Design</span>
+          </span>
+          <span
+            class="hero-tagline__item hero-tagline__item--center"
+            data-animate
+          >
+            <span class="hero-tagline__word hero-tagline__word--motion"
+              >Motion</span
+            >
+          </span>
+          <span
+            class="hero-tagline__item hero-tagline__item--right"
+            data-animate
+          >
+            <span class="hero-tagline__word">Technology</span>
+          </span>
+        </h1>
+
+        <div class="hero-footer">
+          <div class="hero-scroll" data-animate aria-hidden="true">
+            <span class="hero-scroll__label">Scroll</span>
+            <span class="hero-scroll__track">
+              <span class="hero-scroll__dot"></span>
+            </span>
+          </div>
+          <p class="hero-footer__tagline" data-animate>
+            Creating experiences that turn brands
+            <span class="hero-footer__tagline-accent">into impressions.</span>
+          </p>
+        </div>
+      </section>
+
+      <!-- SECTION 01 — ABOUT (model left, all content right) -->
+      <section class="content-panel content-panel--about" data-section="1">
+        <div class="content-panel__layout content-panel__layout--model-left">
+          <div class="content-panel__inner content-panel__inner--about">
+            <h2 class="display-heading display-heading--sm">
+              <span class="display-heading__line" data-animate
+                >BEYOND PIXELS.</span
+              >
+              <span class="display-heading__line" data-animate
+                >WE CREATE DIGITAL WORLDS.</span
+              >
+            </h2>
+            <p class="body-text" data-animate>
+              We don't just design interfaces, we build experiences people feel.
+            </p>
+            <p class="body-text body-text--dim" data-animate>
+              From the first interaction to the final transition, every element
+              has a purpose. We combine strategy, design, and technology to
+              transform ideas into digital experiences that connect.
+            </p>
+
+            <div class="about-services">
+              <p class="section-label" data-animate>WHAT WE BRING</p>
+              <ul class="service-list">
+                <li class="service-list__item" data-animate>
+                  <span class="service-list__bullet" aria-hidden="true">◉</span>
+                  <div>
+                    <h3 class="service-list__title">Creative Direction</h3>
+                    <p class="service-list__desc">
+                      Turning ideas into strong visual identities.
+                    </p>
+                  </div>
+                </li>
+                <li class="service-list__item" data-animate>
+                  <span class="service-list__bullet" aria-hidden="true">◉</span>
+                  <div>
+                    <h3 class="service-list__title">Experience Design</h3>
+                    <p class="service-list__desc">
+                      Creating interfaces that feel intuitive and unforgettable.
+                    </p>
+                  </div>
+                </li>
+                <li class="service-list__item" data-animate>
+                  <span class="service-list__bullet" aria-hidden="true">◉</span>
+                  <div>
+                    <h3 class="service-list__title">Development</h3>
+                    <p class="service-list__desc">
+                      Building fast, scalable, immersive digital products.
+                    </p>
+                  </div>
+                </li>
+                <li class="service-list__item" data-animate>
+                  <span class="service-list__bullet" aria-hidden="true">◉</span>
+                  <div>
+                    <h3 class="service-list__title">
+                      Motion &amp; Interaction
+                    </h3>
+                    <p class="service-list__desc">
+                      Adding life through meaningful movement.
+                    </p>
+                  </div>
+                </li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- SECTION 02 — PROCESS (model right, all content left) -->
+      <section class="content-panel content-panel--process" data-section="2">
+        <div class="content-panel__layout content-panel__layout--model-right">
+          <div class="content-panel__inner content-panel__inner--process">
+            <h2 class="display-heading display-heading--sm">
+              <span class="display-heading__line" data-animate>IDEAS INTO</span>
+              <span class="display-heading__line" data-animate
+                >DIGITAL REALITY.</span
+              >
+            </h2>
+            <p class="body-text" data-animate>
+              Every project starts with curiosity.
+            </p>
+            <p class="body-text body-text--dim" data-animate>
+              We explore, experiment, design, and develop — creating digital
+              experiences that are not only beautiful but built with intention.
+            </p>
+
+            <div class="process-block">
+              <p class="section-label" data-animate>OUR PROCESS</p>
+              <ol class="process-list">
+                <li class="process-list__item" data-animate>
+                  <span class="process-list__step">01 — DISCOVER</span>
+                  <p class="process-list__desc">
+                    Understanding your vision, audience, and goals.
+                  </p>
+                </li>
+                <li class="process-list__item" data-animate>
+                  <span class="process-list__step">02 — DESIGN</span>
+                  <p class="process-list__desc">
+                    Crafting unique concepts and visual systems.
+                  </p>
+                </li>
+                <li class="process-list__item" data-animate>
+                  <span class="process-list__step">03 — DEVELOP</span>
+                  <p class="process-list__desc">
+                    Building seamless experiences with modern technology.
+                  </p>
+                </li>
+                <li class="process-list__item" data-animate>
+                  <span class="process-list__step">04 — DELIVER</span>
+                  <p class="process-list__desc">
+                    Launching a product designed to stand apart.
+                  </p>
+                </li>
+              </ol>
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+
     <div class="scroll-spacer" aria-hidden="true"></div>
     <script type="module" src="/src/main.js"></script>
   </body>
